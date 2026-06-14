@@ -12,11 +12,11 @@ skills the AI track depends on (clean functions, data structures, error handling
 
 - **[Day 01](Day-01-Python-Setup-Variables-and-Data-Types/)** — Setup, data types, operators & variables
 - **[Day 02](Day-02-Strings-F-Strings-and-Methods/)** — Strings, f-strings & string methods
-- **Day 03** — Booleans, conditionals & logical operators
-- **Day 04** — Loops
-- **Day 05** — Functions & scope
-- **Day 06** — Data structures (lists, dicts, tuples, sets)
-- **Day 07** — Errors, modules & OOP
+- **[Day 03](Day-03-Booleans-and-Conditionals/)** — Booleans, conditionals & logical operators
+- **[Day 04](Day-04-Loops/)** — Loops
+- **[Day 05](Day-05-Functions-and-Scope/)** — Functions & scope
+- **[Day 06](Day-06-Data-Structures/)** — Data structures (lists, dicts, tuples, sets)
+- **[Day 07](Day-07-Errors-Modules-and-OOP/)** — Errors, modules & OOP
 
 ## Days 8–15 — First LLM app
 - **Day 08** — Python for AI: `requests`, async basics, `.env` config, Pydantic, type hints

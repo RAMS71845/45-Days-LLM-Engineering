@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GitHub Basics · Day 5 — The Everyday Workflow (Part 2 of 3)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root{
+    --bg:#211f1d; --slide:#ffffff; --cream:#fbf1e6; --cream2:#fdf8f1;
+    --ink:#2c2a28; --ink-soft:#4f463f; --muted:#8a7f73; --line:#efe3d4;
+    --primary:#e8590c; --primary2:#fb8b3d; --gold:#d99000; --steel:#4e6e81; --olive:#6b8e23; --berry:#c0392b;
+    --radius:24px;
+    --shadow:0 30px 80px -20px rgba(20,12,4,.45),0 8px 24px -12px rgba(20,12,4,.3);
+    --font:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono","Cascadia Code",Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;
+    background:radial-gradient(900px 600px at 12% 0%,#2e2a25 0%,transparent 55%),
+               radial-gradient(900px 600px at 100% 100%,#2a201a 0%,transparent 55%),var(--bg);
+    overflow:hidden}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vh,44px)}
+  .slide{display:none;width:min(1160px,96vw);height:min(700px,92vh);background:
+      radial-gradient(1100px 480px at 88% -12%,rgba(232,89,12,.06),transparent 60%),var(--slide);
+    border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(28px,5vw,64px);
+    overflow:hidden;position:relative;flex-direction:column;justify-content:center}
+  .slide.active{display:flex;animation:rise .5s cubic-bezier(.2,.7,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .slide.active>*{animation:fade .6s both}.slide.active>*:nth-child(2){animation-delay:.07s}
+  .slide.active>*:nth-child(3){animation-delay:.14s}.slide.active>*:nth-child(4){animation-delay:.21s}
+  .slide.active>*:nth-child(5){animation-delay:.28s}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .kicker{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);margin-bottom:14px}
+  h1{font-size:clamp(2.1rem,5.2vw,3.5rem);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+  h2{font-size:clamp(1.6rem,3.6vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-.01em;margin-bottom:18px}
+  p{font-size:clamp(1rem,1.7vw,1.22rem);color:var(--ink-soft);line-height:1.6;max-width:62ch}
+  .lead{font-size:clamp(1.1rem,2vw,1.4rem)}
+  .big{font-size:clamp(2.4rem,6vw,4rem);font-weight:800;color:var(--primary);line-height:1}
+  strong{color:var(--ink)}
+  .muted{color:var(--muted)}
+
+  .grid{display:grid;gap:16px;margin-top:8px}
+  .g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:20px 22px;transition:transform .2s,box-shadow .2s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px -16px rgba(20,12,4,.35)}
+  .card h3{font-size:1.12rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .card p{font-size:.98rem;max-width:none}
+  .emoji{font-size:1.4rem}
+  .pill{display:inline-block;background:var(--cream);border:1px solid var(--line);border-radius:999px;
+    padding:7px 16px;font-size:.92rem;font-weight:600;color:var(--ink-soft);margin:5px 6px 0 0}
+  ul.clean{list-style:none;margin-top:10px}
+  ul.clean li{font-size:clamp(1rem,1.7vw,1.2rem);color:var(--ink-soft);line-height:1.5;padding:9px 0 9px 34px;position:relative}
+  ul.clean li::before{content:"";position:absolute;left:0;top:16px;width:14px;height:14px;border-radius:50%;
+    background:var(--primary);box-shadow:0 0 0 4px rgba(232,89,12,.15)}
+  ul.clean li.x::before{background:var(--berry);box-shadow:0 0 0 4px rgba(192,57,43,.15)}
+  .vs{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:6px}
+  .vs .col{border-radius:18px;padding:22px}
+  .vs .no{background:#fdecea;border:1px solid #f3c9c2}.vs .yes{background:#eef6ec;border:1px solid #cfe6c6}
+  .vs .mid{display:flex;align-items:center;font-weight:800;color:var(--muted)}
+  .vs h3{font-size:1.05rem;margin-bottom:8px}.vs p{font-size:.95rem;max-width:none}
+
+  .action{background:linear-gradient(135deg,#fff,var(--cream2));border:2px solid var(--primary);
+    border-radius:20px;padding:24px 26px;margin-top:14px}
+  .action .tag{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
+  .action p{font-size:1.15rem;color:var(--ink);font-weight:600;margin-top:6px;max-width:none}
+
+  .cmd{font-family:var(--mono);background:#211f1d;color:#fbf1e6;border-radius:14px;
+    padding:18px 20px;font-size:clamp(.85rem,1.5vw,1.05rem);line-height:1.85;margin-top:12px;overflow:auto}
+  .cmd .c{color:#fb8b3d}.cmd .o{color:#8a7f73}.cmd .p{color:#6b8e23}
+
+  .diagram{margin-top:10px;background:var(--cream2);border:1px solid var(--line);border-radius:18px;padding:14px}
+  .diagram svg{display:block;width:100%;height:auto}
+  .svg-label{font-family:var(--font);font-weight:700;fill:var(--ink)}
+  .svg-sub{font-family:var(--mono);fill:var(--muted)}
+  .caption{text-align:center;color:var(--muted);font-size:.92rem;margin-top:8px}
+
+  .cover{background:radial-gradient(1200px 500px at 20% -10%,rgba(232,89,12,.16),transparent 60%),
+      radial-gradient(900px 500px at 100% 120%,rgba(217,144,0,.12),transparent 55%),var(--slide)}
+  .brandbar{display:flex;align-items:center;gap:10px;margin-bottom:auto}
+  .dot{width:13px;height:13px;border-radius:50%;background:var(--primary)}
+  .brandbar span{font-weight:700;letter-spacing:.02em}
+  .cover h1 em{font-style:normal;color:var(--primary)}
+  .footer-note{margin-top:auto;color:var(--muted);font-size:.95rem}
+
+  .bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary2));z-index:9;transition:width .3s}
+  .count{position:fixed;left:18px;bottom:14px;color:var(--cream);font-size:.85rem;font-weight:600;opacity:.8;z-index:9;font-variant-numeric:tabular-nums}
+  .nav{position:fixed;right:18px;bottom:14px;display:flex;gap:8px;z-index:9}
+  .nav button{width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.08);color:#fff;font-size:1.1rem;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s}
+  .nav button:hover{background:rgba(255,255,255,.2)}
+  .hint{position:fixed;right:18px;top:16px;color:var(--cream);font-size:.78rem;opacity:.5;z-index:9}
+  @media(max-width:640px){.g2,.g3,.vs{grid-template-columns:1fr}.vs .mid{display:none}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="hint">→ / Space to advance · F for fullscreen</div>
+<div class="stage" id="stage">
+
+  <!-- 1 — cover -->
+  <section class="slide cover active">
+    <div class="brandbar"><span class="dot"></span><span>Softpro · GitHub Basics</span></div>
+    <div class="kicker">Day 5 · Part 2 of 3 · ~20 min</div>
+    <h1>The loop you'll run<br><em>a thousand times</em></h1>
+    <p class="lead" style="margin-top:18px">Yesterday: the <em>why</em>. Today: the four commands that move your code from your laptop to GitHub — <strong>status → add → commit → push</strong>.</p>
+    <div class="footer-note">By the end of this session your first real commit is live on GitHub.</div>
+  </section>
+
+  <!-- 2 — recap + goal -->
+  <section class="slide">
+    <div class="kicker">Where we are</div>
+    <h2>From idea to muscle memory</h2>
+    <p>Day 4 gave you the mental model: <strong>commit = snapshot</strong>, code lives <strong>local</strong> (laptop) and <strong>remote</strong> (GitHub), linked by <strong>push/pull</strong>.</p>
+    <p style="margin-top:14px">Today we make it real. Don't worry about memorising — you'll run this exact loop every day of the course until it's automatic.</p>
+  </section>
+
+  <!-- 3 — the 3 areas -->
+  <section class="slide">
+    <div class="kicker">The one idea that confuses everyone</div>
+    <h2>Your code passes through 3 areas</h2>
+    <div class="grid g3">
+      <div class="card"><h3>1️⃣ Working directory</h3><p>Your actual files, as you edit them right now.</p></div>
+      <div class="card"><h3>2️⃣ Staging area</h3><p>The "shortlist" — changes you've <em>picked</em> to go in the next snapshot.</p></div>
+      <div class="card"><h3>3️⃣ Repository</h3><p>The committed history — snapshots saved forever.</p></div>
+    </div>
+    <p style="margin-top:16px" class="muted">Think of packing a parcel: edit things → <strong>put chosen items in the box</strong> (stage) → <strong>seal &amp; label it</strong> (commit) → <strong>ship it</strong> (push).</p>
+  </section>
+
+  <!-- 4 — the pipeline SVG -->
+  <section class="slide">
+    <div class="kicker">The whole workflow, one picture</div>
+    <h2>add → commit → push</h2>
+    <div class="diagram">
+      <svg viewBox="0 0 980 250" role="img" aria-label="Files flow from working directory to staging to local repo to GitHub">
+        <!-- boxes -->
+        <g>
+          <rect x="12" y="80" width="210" height="92" rx="14" fill="#fbf1e6" stroke="#8a7f73" stroke-width="2"/>
+          <text x="117" y="120" text-anchor="middle" class="svg-label" font-size="17">Working dir</text>
+          <text x="117" y="146" text-anchor="middle" class="svg-sub" font-size="13">your edited files</text>
+
+          <rect x="262" y="80" width="210" height="92" rx="14" fill="#fdf3e6" stroke="#d99000" stroke-width="2.5"/>
+          <text x="367" y="120" text-anchor="middle" class="svg-label" font-size="17">Staging area</text>
+          <text x="367" y="146" text-anchor="middle" class="svg-sub" font-size="13">the shortlist</text>
+
+          <rect x="512" y="80" width="210" height="92" rx="14" fill="#fbf1e6" stroke="#e8590c" stroke-width="2.5"/>
+          <text x="617" y="120" text-anchor="middle" class="svg-label" font-size="17">Local repo</text>
+          <text x="617" y="146" text-anchor="middle" class="svg-sub" font-size="13">.git history</text>
+
+          <rect x="762" y="80" width="206" height="92" rx="14" fill="#eef3f5" stroke="#4e6e81" stroke-width="2.5"/>
+          <text x="865" y="120" text-anchor="middle" class="svg-label" font-size="17">☁️ GitHub</text>
+          <text x="865" y="146" text-anchor="middle" class="svg-sub" font-size="13">remote repo</text>
+        </g>
+        <!-- forward arrows -->
+        <g>
+          <line x1="222" y1="126" x2="260" y2="126" stroke="#d99000" stroke-width="5"/><path d="M260 126 l-15 -8 v16 z" fill="#d99000"/>
+          <text x="241" y="68" text-anchor="middle" class="svg-sub" font-size="14" fill="#d99000">git add</text>
+          <line x1="472" y1="126" x2="510" y2="126" stroke="#e8590c" stroke-width="5"/><path d="M510 126 l-15 -8 v16 z" fill="#e8590c"/>
+          <text x="491" y="68" text-anchor="middle" class="svg-sub" font-size="14" fill="#e8590c">git commit</text>
+          <line x1="722" y1="126" x2="760" y2="126" stroke="#6b8e23" stroke-width="5"/><path d="M760 126 l-15 -8 v16 z" fill="#6b8e23"/>
+          <text x="741" y="68" text-anchor="middle" class="svg-sub" font-size="14" fill="#6b8e23">git push</text>
+        </g>
+        <!-- return arrow: pull/clone -->
+        <line x1="865" y1="200" x2="117" y2="200" stroke="#4e6e81" stroke-width="3" stroke-dasharray="7 7"/>
+        <path d="M117 200 l15 -8 v16 z" fill="#4e6e81"/>
+        <text x="491" y="226" text-anchor="middle" class="svg-sub" font-size="14" fill="#4e6e81">git pull / git clone  (bring changes back down)</text>
+      </svg>
+    </div>
+    <p style="margin-top:6px" class="muted"><strong>add</strong> picks what goes in · <strong>commit</strong> saves the snapshot locally · <strong>push</strong> uploads it to GitHub.</p>
+  </section>
+
+  <!-- 5 — one-time setup -->
+  <section class="slide">
+    <div class="kicker">Two ways to start a project</div>
+    <h2>First, get a repo on your machine</h2>
+    <div class="grid g2">
+      <div class="card"><h3>🆕 Brand-new project</h3>
+        <p>Tell GitHub who you are once, then turn a folder into a repo:</p>
+        <div class="cmd"><span class="o"># one-time, per computer</span><br><span class="p">$</span> <span class="c">git config --global user.name</span> "Your Name"<br><span class="p">$</span> <span class="c">git config --global user.email</span> "you@email.com"<br><br><span class="o"># inside your project folder</span><br><span class="p">$</span> <span class="c">git init</span></div></div>
+      <div class="card"><h3>📥 Existing online repo</h3>
+        <p>Copy one down from GitHub to your computer:</p>
+        <div class="cmd"><span class="p">$</span> <span class="c">git clone</span> https://github.com/<br>&nbsp;&nbsp;&nbsp;you/your-project.git<br><br><span class="o"># creates a folder, fully wired</span><br><span class="o"># to GitHub — ready to work</span></div></div>
+    </div>
+  </section>
+
+  <!-- 6 — the daily loop (commands) -->
+  <section class="slide">
+    <div class="kicker">The loop, in real commands</div>
+    <h2>Your everyday 4 steps</h2>
+    <div class="cmd">
+      <span class="p">$</span> <span class="c">git status</span>            <span class="o"># 1. what changed? (run this constantly)</span><br>
+      <span class="p">$</span> <span class="c">git add</span> .             <span class="o"># 2. stage all changes (the shortlist)</span><br>
+      <span class="p">$</span> <span class="c">git commit -m</span> "Add login validation"   <span class="o"># 3. snapshot + message</span><br>
+      <span class="p">$</span> <span class="c">git push</span>              <span class="o"># 4. upload to GitHub</span>
+    </div>
+    <p style="margin-top:14px">That's the whole job, 90% of the time. <strong>add → commit</strong> are local; <strong>push</strong> is the only step that touches the internet.</p>
+  </section>
+
+  <!-- 7 — git status -->
+  <section class="slide">
+    <div class="kicker">The command you'll run most</div>
+    <h2><code>git status</code> = "where am I?"</h2>
+    <p>When in doubt, <strong>status</strong>. It tells you what's changed, what's staged, and what to do next — it even prints the commands.</p>
+    <div class="cmd">
+      <span class="p">$</span> <span class="c">git status</span><br>
+      <span class="o">Changes not staged for commit:</span><br>
+      &nbsp;&nbsp;<span class="o">modified:</span>   loops.py<br>
+      <span class="o">Untracked files:</span><br>
+      &nbsp;&nbsp;<span class="o">notes.txt</span><br><br>
+      <span class="o"># Git is literally telling you: run `git add` next</span>
+    </div>
+    <p style="margin-top:12px" class="muted">No such thing as running <code>git status</code> too often. It never changes anything — it just informs.</p>
+  </section>
+
+  <!-- 8 — commit messages -->
+  <section class="slide">
+    <div class="kicker">A small habit that screams "pro"</div>
+    <h2>Write commit messages people can read</h2>
+    <div class="vs">
+      <div class="col no"><h3>❌ Useless</h3>
+        <p style="font-family:var(--mono);font-size:.95rem">"stuff"<br>"asdf"<br>"fixed it"<br>"final changes ok now"</p></div>
+      <div class="mid">→</div>
+      <div class="col yes"><h3>✅ Clear</h3>
+        <p style="font-family:var(--mono);font-size:.95rem">"Add BMI calculator exercise"<br>"Fix off-by-one in range loop"<br>"Update README run steps"</p></div>
+    </div>
+    <p style="margin-top:16px">Rule of thumb: finish the sentence <em>"This commit will…"</em> → "…Add login validation." Present tense, what &amp; why. Future-you reads these to time-travel.</p>
+  </section>
+
+  <!-- 9 — .gitignore (critical for the AI course) -->
+  <section class="slide">
+    <div class="kicker">Some things must NEVER be pushed</div>
+    <h2><code>.gitignore</code> — keep secrets &amp; junk out</h2>
+    <p>A file named <code>.gitignore</code> lists what Git should <strong>not</strong> track. Critical in the AI track — your API keys must never reach GitHub.</p>
+    <div class="cmd">
+      <span class="o"># .gitignore</span><br>
+      .env            <span class="o"># your secret API keys — NEVER commit these</span><br>
+      __pycache__/    <span class="o"># Python's cache junk</span><br>
+      venv/           <span class="o"># the virtual environment</span><br>
+      *.log           <span class="o"># log files</span>
+    </div>
+    <p style="margin-top:12px;color:var(--berry);font-weight:600">⚠️ A leaked API key in a public repo can be abused within minutes. Add <code>.env</code> to <code>.gitignore</code> before your first push.</p>
+  </section>
+
+  <!-- 10 — pull / staying in sync -->
+  <section class="slide">
+    <div class="kicker">When you (or a teammate) edit elsewhere</div>
+    <h2><code>git pull</code> before you start</h2>
+    <ul class="clean">
+      <li><strong>Pull</strong> downloads the latest commits from GitHub into your local repo.</li>
+      <li>Edited on another laptop, or on github.com directly? Pull first so you're up to date.</li>
+      <li>Habit: <strong>pull → work → add → commit → push.</strong> Start in sync, end in sync.</li>
+    </ul>
+    <div class="cmd" style="margin-top:8px"><span class="p">$</span> <span class="c">git pull</span>   <span class="o"># grab the newest changes before you begin</span></div>
+  </section>
+
+  <!-- 11 — cheat sheet -->
+  <section class="slide">
+    <div class="kicker">Pin this to your wall</div>
+    <h2>The Day-5 cheat sheet</h2>
+    <div class="grid g2">
+      <div class="card"><h3>🔍 <code>git status</code></h3><p>What changed / what's staged. Run it constantly.</p></div>
+      <div class="card"><h3>➕ <code>git add .</code></h3><p>Stage your changes for the next commit.</p></div>
+      <div class="card"><h3>📸 <code>git commit -m "msg"</code></h3><p>Save a snapshot with a clear message.</p></div>
+      <div class="card"><h3>⬆️ <code>git push</code> / ⬇️ <code>git pull</code></h3><p>Sync up to / down from GitHub.</p></div>
+    </div>
+  </section>
+
+  <!-- 12 — action -->
+  <section class="slide">
+    <div class="kicker">Your move today</div>
+    <h2>GitHub Action — Day 5</h2>
+    <div class="action">
+      <span class="tag">⏱ ≤ 15 minutes</span>
+      <p>Push your <strong>Day-4 loops folder</strong> to a new GitHub repo: <code>git init</code> → add a <code>.gitignore</code> → <code>add</code> → <code>commit</code> → create the repo on github.com → <code>push</code>. See your code live online.</p>
+    </div>
+    <p style="margin-top:16px" class="muted">Stuck? That's expected the first time — the TA will float. Once it clicks, it's clicked for life.</p>
+  </section>
+
+  <!-- 13 — close -->
+  <section class="slide cover">
+    <div class="brandbar"><span class="dot"></span><span>Softpro · GitHub Basics</span></div>
+    <h1>status → add → commit → push.<br><em>Now it's muscle memory.</em></h1>
+    <p class="lead" style="margin-top:18px">Part 3 tomorrow: <strong>branches &amp; pull requests</strong> — how teams build together without chaos. 🚀</p>
+    <div class="footer-note">Part 2 of 3 · Day 5 — The Everyday Workflow. Next: Day 6 — Branching &amp; Collaboration.</div>
+  </section>
+
+</div>
+
+<div class="count" id="count">1 / 13</div>
+<div class="nav"><button id="prev" aria-label="Previous">‹</button><button id="full" aria-label="Fullscreen">⛶</button><button id="next" aria-label="Next">›</button></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];let i=0;
+  const bar=document.getElementById('bar'),count=document.getElementById('count');
+  function show(n){i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    bar.style.width=((i+1)/slides.length*100)+'%';count.textContent=(i+1)+' / '+slides.length;}
+  function next(){show(i+1)}function prev(){show(i-1)}
+  document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;
+  document.getElementById('full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')next();
+    else if(e.key==='ArrowLeft')prev();
+    else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F')document.getElementById('full').click();});
+  document.getElementById('stage').addEventListener('click',e=>{
+    if(e.target.closest('.nav'))return;const x=e.clientX/window.innerWidth;x>0.5?next():prev();});
+  show(0);
+</script>
+</body>
+</html>

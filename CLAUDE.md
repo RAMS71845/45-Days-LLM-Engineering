@@ -99,6 +99,13 @@ Phase-X-Name/Day-NN-Topic-In-Kebab-Case/
 - ✅ **Career Launchpad** plan (`CAREER-PLAN.md`) + **Days 1–2 career decks** committed; Days 3–7 decks drafted locally (not yet committed).
 - ✅ **Day 2 trainer's guide** (`TRAINERS-GUIDE.md`) — full minute-by-minute session script.
 - ✅ **Day 3** complete and verified (7 modules + 3 exercises: Booleans, conditionals & logical operators) + trainer's guide.
-- ⏳ Days 4–7 (Python *code*) next; then Day 8+ (AI track).
-- ⏳ Career decks Days 8–45 to follow.
+- ✅ **Day 4** complete and verified (6 modules + 3 exercises: Loops — while/for/range/break-continue/nested/loop-patterns).
+- ✅ **Day 5** complete and verified (7 modules + 3 exercises: Functions & scope — def/params/return/defaults+keyword/LEGB/global/args-kwargs).
+- ✅ **Day 5 Logic Building Challenge** (`Day-05.../logic-building/`) — 5 think-first problems recapping Days 1–5 (FizzBuzz · reverse-number/palindrome via maths · primes · word stats · number pyramid), each with stub + verified `_solution.py`, plus `SOLUTIONS.md` (5-step walk-throughs) and a deck `index.html` (*How to Build Logic When You Code* — Understand→Example→Plan→Code→Test, on the method, not the answers) + `DECK-NOTES.md`.
+- ✅ **Day 6** complete and verified (7 modules + 3 exercises: Data structures — lists/list-patterns/dicts/dict-iteration/tuples/sets/choosing).
+- ✅ **Day 7** complete and verified (7 modules + 3 exercises: Errors, modules & OOP — error-types/try-except/imports/pip/classes/methods/inheritance).
+- ✅ **Python power-up week (Days 1–7) is fully built and verified.** All example scripts print ASCII-only (₹/emoji in comments only) so they run under the Windows console codepage.
+- ✅ **GitHub Basics mini-track** — a beginner 3-part visual deck woven into Days 4–6, each in a `github-basics/` folder (`index.html` + speaker-notes `README.md`): Day 4 *Why GitHub* (commit-timeline + local/remote SVGs) · Day 5 *Everyday Workflow* (add/commit/push staging SVG, `.gitignore`) · Day 6 *Branching & Collaboration* (branch-and-merge SVG, PRs). Same Softpro deck template as the career talks, with added `.cmd`/`.diagram` styles; explanations use inline SVG.
+- ⏳ Day 8+ (AI track) next.
+- ⏳ Career decks Days 8–45 to follow; Days 4–7 trainer's guides optional (not yet written).
 - Repo initialized (git).

@@ -12,11 +12,26 @@ day ranges fixed by [`../COURSE-PLAN.md`](../COURSE-PLAN.md).
 |----:|-------|--------------|
 | 1 | Setup, data types, operators & variables | ✅ Built & verified |
 | 2 | Strings, f-strings & string methods | ✅ Built & verified (+ trainer's guide) |
-| 3 | Booleans, conditionals & logic | 📋 Planned (folder has career talk only) |
-| 4 | Loops | 📋 Planned |
-| 5 | Functions & scope | 📋 Planned |
-| 6 | Data structures | 📋 Planned |
-| 7 | Errors, modules & OOP | 📋 Planned |
+| 3 | Booleans, conditionals & logic | ✅ Built & verified (+ trainer's guide) |
+| 4 | Loops | ✅ Built & verified |
+| 5 | Functions & scope | ✅ Built & verified |
+| 6 | Data structures | ✅ Built & verified |
+| 7 | Errors, modules & OOP | ✅ Built & verified |
+
+## 🐙 GitHub Basics mini-track (Days 4–6)
+A beginner-friendly **3-part GitHub intro** runs alongside the code on Days 4–6 — one visual deck per
+day in that day's `github-basics/` folder (`index.html` + speaker-notes `README.md`, same Softpro deck
+template as the career talks, with inline-SVG diagrams). Goal: students *understand why* version
+control matters and *start using* GitHub for their course work.
+
+| Day | Deck | Visuals |
+|----:|------|---------|
+| 4 | **Why GitHub?** — Git vs GitHub, commit=snapshot, repo, local vs remote, make an account | commit-timeline SVG, local↔remote SVG |
+| 5 | **The Everyday Workflow** — `status → add → commit → push`, the 3 areas, `.gitignore`, `pull` | staging-pipeline SVG, terminal blocks |
+| 6 | **Branching & Collaboration** — branches, merge, conflicts, pull requests, forks, repo-as-portfolio | branch-and-merge graph SVG, PR-flow strip |
+
+Each deck ends with a ≤15-min **GitHub Action** (create account → push Day-4 folder → open first PR),
+so by Day 6 every student has a live repo. `.env`/secrets hygiene is taught in Part 2 ahead of the AI track.
 
 ## Per-day shape (every day is identical in structure)
 Each day = a `Day-NN-Topic/` folder following the repo convention:
@@ -98,85 +113,87 @@ Each day only forward-references the next minimally (e.g. f-strings appeared D2 
 
 ---
 
-## 📋 Day 4 — Loops
-**Folder:** `Day-04-Loops` · **Objective:** repeat work without repeating code.
+## ✅ Day 4 — Loops
+**Folder:** `Day-04-Loops` · **Objective:** repeat work without repeating code. *Built. 6 modules + 3 exercises.*
 
 | # | Module | Covers | `python.txt` source |
 |--:|--------|--------|---------------------|
-| 01 | while-loops | `while`, conditions, **avoiding infinite loops** | While Loops, Avoiding Infinite Loops |
-| 02 | for-loops | iterating sequences (strings, soon lists) | For Loops, Loops & Indentation |
-| 03 | range | `range(stop/start,stop/step)` | The range() function |
-| 04 | break-and-continue | early exit + skip | Break and Continue |
-| 05 | nested-loops | loops inside loops (grids, patterns) | Working With Nested Loops |
+| 01 | while-loops | `while`, conditions, **avoiding infinite loops**, `while True`+`break` | While Loops, Avoiding Infinite Loops |
+| 02 | for-loops | iterating strings/lists, `enumerate`, `for` vs `while` | For Loops, Loops & Indentation |
+| 03 | range | `range(stop/start,stop/step)`, countdowns, pagination | The range() function |
+| 04 | break-and-continue | early exit + skip, loop-`else`, retry/validation | Break and Continue |
+| 05 | nested-loops | loops inside loops (grids, tables, pairs) | Working With Nested Loops |
+| 06 | loop-patterns | accumulate / count / search-flag / build / **retry-backoff** | Loops In The Wild |
 
-**Exercises:** `number_guessing_game` (while + input + random — ties D3 in) · `bottles_of_beer`
-(for + range, the classic countdown) · `dice_roller` (loops + random).
-**Stretch:** `toothpick_game` (2-player logic refactor).
-**Gotchas to stage:** off-by-one in `range`; the infinite `while True` without `break`; forgetting to
-update the loop variable.
+**Exercises:** `guessing_game` (while + input + random — ties D3 in) · `fizzbuzz`
+(for + range + `%`, the classic screen) · `multiplication_table` (nested loops + f-string alignment).
+**Gotchas staged:** off-by-one in `range`; the infinite `while True` without `break`; forgetting to
+update the loop variable; one `break` only escaping the inner loop.
 
 ---
 
-## 📋 Day 5 — Functions & Scope
-**Folder:** `Day-05-Functions-and-Scope` · **Objective:** package logic into reusable, named blocks.
+## ✅ Day 5 — Functions & Scope
+**Folder:** `Day-05-Functions-and-Scope` · **Objective:** package logic into reusable, named blocks. *Built. 7 modules + 3 exercises.*
 
 | # | Module | Covers | `python.txt` source |
 |--:|--------|--------|---------------------|
-| 01 | defining-functions | `def`, calling, why functions | Introducing/First Function |
-| 02 | parameters-and-arguments | one & multiple inputs | Functions With Input(s) |
-| 03 | return-values | `return` vs `print`; using results | Introducing/Using Return |
-| 04 | default-and-keyword-args | defaults, ordering, named args | Default Params, Keyword Arguments |
-| 05 | scope-legb | local/enclosing/global/built-in + `global` | Global/Local/Enclosing Scope, Precedence |
-| 06 | args-and-kwargs | `*args`, `**kwargs`, unpacking, mutable-default gotcha | *args, **kwargs, Mutable Default Args |
+| 01 | defining-functions | `def`, calling, docstrings, DRY | Introducing/First Function |
+| 02 | parameters-and-arguments | one & multiple inputs, positional order | Functions With Input(s) |
+| 03 | return-values | `return` vs `print`; early return; multiple returns | Introducing/Using Return |
+| 04 | default-and-keyword-args | defaults, ordering, named args, **mutable-default trap** | Default Params, Keyword Arguments, Mutable Default Args |
+| 05 | scope-legb | local/enclosing/global/built-in, closures | Global/Local/Enclosing Scope, Precedence |
+| 06 | global-keyword | `global`, why it's a smell, `nonlocal` | The 'Global' Keyword |
+| 07 | args-kwargs | `*args`, `**kwargs`, unpacking calls | *args, **kwargs |
 
-**Exercises:** `calculator_functions` (params + return) · `greeter` (default/keyword args) ·
-`sum_all` (`*args`).
+**Exercises:** `temperature_converter` (params + return, composing) · `password_checker`
+(default args, returns a verdict) · `receipt_builder` (`*args` + `**kwargs`).
 **Learning checks:** difference between `return` and `print`; predict a LEGB scope puzzle.
-**Gotchas to stage:** function that prints but returns `None`; the mutable default arg `def f(x=[])`.
+**Gotchas staged:** function that prints but returns `None`; the mutable default arg `def f(x=[])`;
+the `UnboundLocalError` from assigning to a global.
 
 ---
 
-## 📋 Day 6 — Data Structures
+## ✅ Day 6 — Data Structures
 **Folder:** `Day-06-Data-Structures` · **Objective:** store and organise collections of data.
-*(Densest pre-OOP day — budget time carefully; lists get two modules.)*
+*(Densest pre-OOP day.) Built. 7 modules + 3 exercises.*
 
 | # | Module | Covers | `python.txt` source |
 |--:|--------|--------|---------------------|
-| 01 | lists-basics | create, index, update, mutability | Creating/Accessing/Updating Lists |
-| 02 | list-methods | append/extend/insert/pop/remove/sort/reverse/count | List Methods, Sort/Reverse/Count |
-| 03 | list-slicing-and-loops | slices, iteration, list+loop patterns | List Slices, Iterating, Patterns |
-| 04 | nested-lists-and-copying | nested lists, `==` vs `is`, copy, `split`/`join`, unpacking | Nested Lists, Copying, Join/Split, Unpacking |
-| 05 | dictionaries | create, `get`/`in`, add/update, `pop`/`del`, iterate keys/values/items, merge | Dictionaries (all) |
-| 06 | tuples | immutability, why/when to use | Tuples |
-| 07 | sets | uniqueness, union/intersection/difference, when to use | Sets |
+| 01 | lists | create, index, slice, `append`/`insert`/`extend`/`pop`/`remove` | Creating/Accessing/Updating Lists, List Methods |
+| 02 | list-patterns-and-nested | iterate, `sort`/`sorted`, comprehensions, nested lists, **copy vs reference** | List Slices, Iterating, Nested Lists, Copying |
+| 03 | dictionaries | create, `get`/`in`, add/update, `pop`/`del` | Dictionaries (intro/access/update) |
+| 04 | dict-iteration-and-merging | `keys`/`values`/`items`, merging, **list-of-dicts** | Iterating Dicts, Merging, Lists+Dicts |
+| 05 | tuples | immutability, unpacking, why/when to use | Tuples |
+| 06 | sets | uniqueness, union/intersection/difference, when to use | Sets |
+| 07 | choosing-the-right-structure | the decision flow + real scenarios + nesting (JSON) | (synthesis) |
 
-**Exercises:** `grand_prix` (lists + loops) · `todo_list` (list CRUD via menu) ·
-`peak_dictionary` (dict iteration + lists-in-dicts).
-**Gotchas to stage:** list aliasing (`b = a` shares the same list) vs `a.copy()`; `KeyError` vs `.get()`;
-mutating a list while iterating.
+**Exercises:** `todo_list` (list CRUD via menu) · `word_frequency` (dict count pattern) ·
+`common_skills` (set algebra `&` / `|` / `-` / `^`).
+**Gotchas staged:** list aliasing (`b = a` shares the same list) vs `a.copy()`; `KeyError` vs `.get()`;
+`{}` is a dict not a set; mutating a method's return value of `None`.
 
 ---
 
-## 📋 Day 7 — Errors, Modules & OOP
+## ✅ Day 7 — Errors, Modules & OOP
 **Folder:** `Day-07-Errors-Modules-and-OOP` · **Objective:** handle failure, reuse code, model with classes.
-*(The most packed day — three sub-topics. See prioritisation note below.)*
+*(The most packed day — three sub-topics.) Built. 7 modules + 3 exercises.*
 
 | # | Module | Covers | `python.txt` source |
 |--:|--------|--------|---------------------|
-| 01 | error-types | common exceptions; reading tracebacks | Common Error Types |
-| 02 | try-except | handling, `raise`, LBYL vs EAFP | Try/Except, Raising, LBYL/EAFP |
-| 03 | modules-and-imports | built-in modules, import syntax, custom modules | Built-In Modules, Import Syntax, Custom Modules |
-| 04 | pip-and-pypi | 3rd-party packages, `pip install` | Pip & PyPI, First Pip Package |
-| 05 | classes-and-objects | `class`, instances, `__init__`, instance methods | Class Syntax, Instance Methods |
-| 06 | class-attributes-and-methods | class attributes, class methods | Class Attributes/Methods |
-| 07 | inheritance-and-super | inheritance, `super()` | Inheritance Basics, super() |
+| 01 | error-types | common exceptions; reading tracebacks bottom-up | Common Error Types |
+| 02 | try-except | `try`/`except`/`else`/`finally`, `raise`, custom exceptions, LBYL vs EAFP | Try/Except, Raising, LBYL/EAFP |
+| 03 | modules-and-imports | built-in modules (`math`/`random`/`datetime`/`json`), import styles, `__name__` | Built-In Modules, Import Syntax, Custom Modules |
+| 04 | pip-and-third-party | PyPI, `pip`, `requirements.txt`, venv, **safe `ImportError` fallback** | Pip & PyPI, First Pip Package |
+| 05 | classes-and-objects | `class`, instances, `__init__`, `self`, attributes | Class Syntax, Instance Methods |
+| 06 | instance-methods | methods, class vs instance attributes, `__str__` | Class Attributes/Methods |
+| 07 | inheritance-and-super | inheritance ("is-a"), overriding, `super()` | Inheritance Basics, super() |
 
-**Exercises:** `custom_module` (write + import your own `.py`) · `bank_account` (a class with methods) ·
-`sentiment_analysis` (install a pip package — the fun mini-project bridging into the AI track).
-**Prioritisation (if short on time):** Errors (01–02) and OOP (05–07) are load-bearing for the AI
-track; `pip` (04) is essential for Day 8+. Custom-module depth (03) can compress.
-**Gotchas to stage:** bare `except:` swallowing everything; `self` forgotten in methods; mutable
-class attributes shared across instances.
+**Exercises:** `safe_calculator` (try/except + custom exception) · `bank_account` (a class with guarded
+methods + statement log) · `shapes` (base `Shape` + `Rectangle`/`Circle`/`Square` via `super()`).
+**Note:** the pip module runs offline — it demonstrates a graceful `try/except ImportError` so it works
+even when the package isn't installed.
+**Gotchas staged:** bare `except:` swallowing everything; `self` forgotten in methods; forgetting
+`super().__init__()`; `ValueError` vs `TypeError`.
 
 ---
 

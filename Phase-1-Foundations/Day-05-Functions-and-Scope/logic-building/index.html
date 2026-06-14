@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Logic Building for Programming · Softpro School of AI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+  :root{
+    --bg:#211f1d; --slide:#ffffff; --cream:#fbf1e6; --cream2:#fdf8f1;
+    --ink:#2c2a28; --ink-soft:#4f463f; --muted:#8a7f73; --line:#efe3d4;
+    --primary:#e8590c; --primary2:#fb8b3d; --gold:#d99000; --steel:#4e6e81; --olive:#6b8e23; --berry:#c0392b;
+    --radius:24px;
+    --shadow:0 30px 80px -20px rgba(20,12,4,.45),0 8px 24px -12px rgba(20,12,4,.3);
+    --font:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+    --mono:"JetBrains Mono","Cascadia Code",Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;
+    background:radial-gradient(900px 600px at 12% 0%,#2e2a25 0%,transparent 55%),
+               radial-gradient(900px 600px at 100% 100%,#2a201a 0%,transparent 55%),var(--bg);
+    overflow:hidden}
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vh,44px)}
+  .slide{display:none;width:min(1160px,96vw);height:min(700px,92vh);background:
+      radial-gradient(1100px 480px at 88% -12%,rgba(232,89,12,.06),transparent 60%),var(--slide);
+    border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(28px,5vw,60px);
+    overflow:hidden;position:relative;flex-direction:column;justify-content:center}
+  .slide.active{display:flex;animation:rise .5s cubic-bezier(.2,.7,.2,1)}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .slide.active>*{animation:fade .6s both}.slide.active>*:nth-child(2){animation-delay:.07s}
+  .slide.active>*:nth-child(3){animation-delay:.14s}.slide.active>*:nth-child(4){animation-delay:.21s}
+  .slide.active>*:nth-child(5){animation-delay:.28s}.slide.active>*:nth-child(6){animation-delay:.35s}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .kicker{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);margin-bottom:14px}
+  h1{font-size:clamp(2.1rem,5.2vw,3.5rem);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+  h2{font-size:clamp(1.6rem,3.6vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-.01em;margin-bottom:18px}
+  p{font-size:clamp(1rem,1.7vw,1.22rem);color:var(--ink-soft);line-height:1.6;max-width:62ch}
+  .lead{font-size:clamp(1.1rem,2vw,1.4rem)}
+  .big{font-size:clamp(2.4rem,6vw,4rem);font-weight:800;color:var(--primary);line-height:1}
+  strong{color:var(--ink)}.muted{color:var(--muted)}
+  .grid{display:grid;gap:16px;margin-top:8px}
+  .g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:18px 20px;transition:transform .2s,box-shadow .2s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px -16px rgba(20,12,4,.35)}
+  .card h3{font-size:1.08rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .card p{font-size:.96rem;max-width:none}
+  .num{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;border-radius:9px;
+    background:var(--primary);color:#fff;font-weight:800;font-size:.95rem;margin-right:4px}
+  .emoji{font-size:1.3rem}
+  .pill{display:inline-block;background:var(--cream);border:1px solid var(--line);border-radius:999px;
+    padding:7px 16px;font-size:.92rem;font-weight:600;color:var(--ink-soft);margin:5px 6px 0 0}
+  ul.clean{list-style:none;margin-top:10px}
+  ul.clean li{font-size:clamp(1rem,1.7vw,1.18rem);color:var(--ink-soft);line-height:1.5;padding:8px 0 8px 34px;position:relative}
+  ul.clean li::before{content:"";position:absolute;left:0;top:15px;width:14px;height:14px;border-radius:50%;
+    background:var(--primary);box-shadow:0 0 0 4px rgba(232,89,12,.15)}
+  ul.clean li.x::before{background:var(--berry);box-shadow:0 0 0 4px rgba(192,57,43,.15)}
+  ul.clean li.ok::before{background:var(--olive);box-shadow:0 0 0 4px rgba(107,142,35,.15)}
+  .fx{font-family:var(--mono);font-size:1rem;background:var(--cream);border:1px solid var(--line);
+    border-radius:14px;padding:16px 18px;margin-top:10px;color:var(--ink);line-height:1.7;white-space:pre}
+  .action{background:linear-gradient(135deg,#fff,var(--cream2));border:2px solid var(--primary);
+    border-radius:20px;padding:22px 24px;margin-top:14px}
+  .action .tag{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--primary)}
+  .action p{font-size:1.12rem;color:var(--ink);font-weight:600;margin-top:6px;max-width:none}
+  .cover{background:radial-gradient(1200px 500px at 20% -10%,rgba(232,89,12,.16),transparent 60%),
+      radial-gradient(900px 500px at 100% 120%,rgba(217,144,0,.12),transparent 55%),var(--slide)}
+  .brandbar{display:flex;align-items:center;gap:10px;margin-bottom:auto}
+  .dot{width:13px;height:13px;border-radius:50%;background:var(--primary)}
+  .brandbar span{font-weight:700;letter-spacing:.02em}
+  .cover h1 em{font-style:normal;color:var(--primary)}
+  .footer-note{margin-top:auto;color:var(--muted);font-size:.95rem}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+  .label{font-size:.82rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--primary2));z-index:9;transition:width .3s}
+  .count{position:fixed;left:18px;bottom:14px;color:var(--cream);font-size:.85rem;font-weight:600;opacity:.8;z-index:9;font-variant-numeric:tabular-nums}
+  .nav{position:fixed;right:18px;bottom:14px;display:flex;gap:8px;z-index:9}
+  .nav button{width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.08);color:#fff;font-size:1.1rem;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s}
+  .nav button:hover{background:rgba(255,255,255,.2)}
+  .hint{position:fixed;right:18px;top:16px;color:var(--cream);font-size:.78rem;opacity:.5;z-index:9}
+  @media(max-width:640px){.g2,.g3,.twocol{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bar" id="bar"></div>
+<div class="hint">→ / Space to advance · F for fullscreen</div>
+<div class="stage" id="stage">
+
+  <!-- 1 COVER -->
+  <section class="slide cover active">
+    <div class="brandbar"><span class="dot"></span><span>Softpro School of AI · Day 5</span></div>
+    <div class="kicker">Logic Building · 30 minutes</div>
+    <h1>How to Build<br><em>Logic</em> When You Code</h1>
+    <p class="lead" style="margin-top:18px">Syntax you can Google. The real skill is turning a problem into a plan a computer can follow. That skill is learnable — here's the method.</p>
+    <div class="footer-note">Think first. Type second.</div>
+  </section>
+
+  <!-- 2 THE GAP -->
+  <section class="slide">
+    <div class="kicker">The real bottleneck</div>
+    <h2>You know the syntax. You're stuck anyway.</h2>
+    <p>Most beginners can read every line of Python and still stare at a blank screen when handed a new problem. That's normal — and it's not a syntax gap.</p>
+    <p style="margin-top:14px">It's a <strong>logic gap</strong>: the leap from <em>"what is being asked"</em> to <em>"what steps solve it."</em> Today is a repeatable method to cross that gap every time.</p>
+  </section>
+
+  <!-- 3 WHAT IS LOGIC BUILDING -->
+  <section class="slide">
+    <div class="kicker">Definition</div>
+    <h2>Logic building = designing the steps</h2>
+    <div class="grid g2">
+      <div class="card"><h3>🧠 The thinking job</h3><p>Break a problem into a precise, ordered sequence of steps — clear enough that a machine (with zero common sense) can follow it.</p></div>
+      <div class="card"><h3>⌨️ The typing job</h3><p>Translate those steps into Python. This is the <em>easy</em> part once the steps exist.</p></div>
+    </div>
+    <p style="margin-top:16px" class="muted">A computer does exactly what you say, in order, literally. Logic building is writing instructions for the world's fastest, most literal-minded helper.</p>
+  </section>
+
+  <!-- 4 THE 5-STEP METHOD OVERVIEW -->
+  <section class="slide">
+    <div class="kicker">The method</div>
+    <h2>5 steps — and 4 are away from the keyboard</h2>
+    <ul class="clean">
+      <li><strong>1 · Understand</strong> — pin down the inputs, the output, and the rules.</li>
+      <li><strong>2 · Example by hand</strong> — solve one case on paper; watch how your brain does it.</li>
+      <li><strong>3 · Plan</strong> — write the steps in plain English (pseudocode); pick a pattern.</li>
+      <li class="ok"><strong>4 · Code</strong> — translate each line of the plan into Python.</li>
+      <li><strong>5 · Test</strong> — run normal, boundary, and weird inputs; fix and repeat.</li>
+    </ul>
+    <p style="margin-top:12px" class="muted">If you jump straight to step 4, you're guessing. The plan is what you're really paid for.</p>
+  </section>
+
+  <!-- 5 STEP 1 -->
+  <section class="slide">
+    <div class="kicker">Step 1 of 5</div>
+    <h2>Understand the problem</h2>
+    <p>Don't write a line until you can answer three questions out loud:</p>
+    <div class="grid g3" style="margin-top:6px">
+      <div class="card"><h3>📥 Input</h3><p>What do I get, and in what form? A number? A string? A list?</p></div>
+      <div class="card"><h3>📤 Output</h3><p>What exactly must I produce or return? One value? Many?</p></div>
+      <div class="card"><h3>📏 Rules</h3><p>What are the conditions and the tricky edges (empty, zero, negative)?</p></div>
+    </div>
+    <p style="margin-top:16px"><strong>Restate it in one sentence in your own words.</strong> If you can't, you don't understand it yet — and no code will fix that.</p>
+  </section>
+
+  <!-- 6 STEP 2 -->
+  <section class="slide">
+    <div class="kicker">Step 2 of 5</div>
+    <h2>Do one example by hand</h2>
+    <p>Take a real input and solve it on paper — no code. Then ask the magic question:</p>
+    <div class="action" style="border-color:var(--steel)">
+      <span class="tag" style="color:var(--steel)">The magic question</span>
+      <p>"What did my brain just do, step by step, to get that answer?"</p>
+    </div>
+    <p style="margin-top:16px">Your hand-solution <em>is</em> the algorithm — you just have to slow down and notice the steps you did automatically. Do a second example if the first felt like a fluke.</p>
+  </section>
+
+  <!-- 7 STEP 3 -->
+  <section class="slide">
+    <div class="kicker">Step 3 of 5</div>
+    <h2>Plan in plain English (pseudocode)</h2>
+    <div class="twocol">
+      <div>
+        <div class="label">Write the steps, not the syntax</div>
+        <div class="fx">get the number N
+total = 0
+for each number from 1 to N:
+    add it to total
+show total</div>
+      </div>
+      <div>
+        <div class="label">Why bother</div>
+        <ul class="clean" style="margin-top:0">
+          <li>Catches flawed logic <em>before</em> you fight the syntax.</li>
+          <li>Language-independent — same plan works in any language.</li>
+          <li>The comments for your code are already written.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 PATTERN TOOLBOX -->
+  <section class="slide">
+    <div class="kicker">Step 3, continued</div>
+    <h2>The pattern toolbox</h2>
+    <p>Most problems are a few familiar shapes combined. Learn to spot them:</p>
+    <div class="grid g3" style="margin-top:6px">
+      <div class="card"><h3>➕ Accumulator</h3><p>A running total or string you add to in a loop (sum, build text).</p></div>
+      <div class="card"><h3>🔢 Counter</h3><p>Tally how many times something happens (<code>count += 1</code>).</p></div>
+      <div class="card"><h3>🚩 Boolean flag</h3><p>Track yes/no across a loop ("have I seen one yet?").</p></div>
+      <div class="card"><h3>🔎 Search + break</h3><p>Scan until you find it, then stop early.</p></div>
+      <div class="card"><h3>🏆 Best so far</h3><p>Keep the current champion (max, min, longest word).</p></div>
+      <div class="card"><h3>🧩 Decompose</h3><p>Split into small functions and solve each alone.</p></div>
+    </div>
+  </section>
+
+  <!-- 9 STEP 4 -->
+  <section class="slide">
+    <div class="kicker">Step 4 of 5</div>
+    <h2>Translate the plan to code</h2>
+    <div class="twocol">
+      <div>
+        <div class="label">Plan</div>
+        <div class="fx">total = 0
+for each n from 1 to N:
+    add n to total
+return total</div>
+      </div>
+      <div>
+        <div class="label">Python</div>
+        <div class="fx">def add_up(N):
+    total = 0
+    for n in range(1, N+1):
+        total += n
+    return total</div>
+      </div>
+    </div>
+    <p style="margin-top:14px" class="muted">Each plan line becomes one or two lines of code. Now the syntax from Days 1–5 is all you need: variables, loops, conditionals, functions.</p>
+  </section>
+
+  <!-- 10 STEP 5 -->
+  <section class="slide">
+    <div class="kicker">Step 5 of 5</div>
+    <h2>Test like you're trying to break it</h2>
+    <p>Code that runs once on one input isn't done. Always try three kinds of input:</p>
+    <ul class="clean">
+      <li class="ok"><strong>Normal</strong> — a typical case you expect (e.g. N = 5).</li>
+      <li><strong>Boundary</strong> — the edges: 0, 1, empty string, the first/last item.</li>
+      <li class="x"><strong>Weird</strong> — negatives, huge values, the unexpected.</li>
+    </ul>
+    <p style="margin-top:12px">A failing test isn't failure — it's a free bug report. Trace it back to the <em>plan</em>, fix the logic, run again.</p>
+  </section>
+
+  <!-- 11 DEBUGGING MINDSET -->
+  <section class="slide">
+    <div class="kicker">When it breaks</div>
+    <h2>Stuck? Debug the logic, not the keyboard</h2>
+    <div class="grid g2">
+      <div class="card"><h3>🖨️ Print to see</h3><p>Drop in <code>print()</code> to watch variables change. Reality vs. what you assumed — the gap is the bug.</p></div>
+      <div class="card"><h3>🦆 Explain it aloud</h3><p>Talk through your code line by line (to a friend, or a rubber duck). You'll hear the flaw yourself.</p></div>
+      <div class="card"><h3>✂️ Shrink the input</h3><p>Make it the smallest failing case. Less noise, faster fix.</p></div>
+      <div class="card"><h3>↩️ Back to the plan</h3><p>Most bugs are wrong <em>logic</em>, not wrong syntax. Re-check step 3, not the semicolons.</p></div>
+    </div>
+  </section>
+
+  <!-- 12 PITFALLS -->
+  <section class="slide">
+    <div class="kicker">Avoid these</div>
+    <h2>Beginner traps</h2>
+    <ul class="clean">
+      <li class="x"><strong>Coding before understanding</strong> — typing to "figure it out" wastes the most time.</li>
+      <li class="x"><strong>Trying to write it perfectly in one go</strong> — get it working, then improve it.</li>
+      <li class="x"><strong>Copying code you don't understand</strong> — it breaks the moment the problem shifts.</li>
+      <li class="x"><strong>Ignoring edge cases</strong> — empty, zero, and negative inputs are where bugs hide.</li>
+      <li class="ok"><strong>Do instead:</strong> plan on paper, build in small steps, test as you go.</li>
+    </ul>
+  </section>
+
+  <!-- 13 HOW TO GET GOOD -->
+  <section class="slide">
+    <div class="kicker">It's a muscle</div>
+    <h2>How logic building actually grows</h2>
+    <p>Nobody is "born logical." It's pattern recognition built by reps — the more problems you solve, the faster you see the shape of a new one.</p>
+    <div class="grid g3" style="margin-top:6px">
+      <div class="card"><h3>📅 A little, daily</h3><p>One or two problems a day beats a weekend binge. Consistency wins.</p></div>
+      <div class="card"><h3>✍️ Plan first, always</h3><p>Force the pseudocode step even when you "know" the answer.</p></div>
+      <div class="card"><h3>🔁 Re-solve</h3><p>Redo old problems a different way. New angles deepen the patterns.</p></div>
+    </div>
+  </section>
+
+  <!-- 14 ACTION / RECAP -->
+  <section class="slide">
+    <div class="kicker">Your move today</div>
+    <h2>Run the method on the 5 challenges</h2>
+    <div class="action">
+      <span class="tag">⏱ Practice now</span>
+      <p>Open <code>README.md</code> and solve all 5 logic problems — but for <strong>each one, write the plan on paper first</strong> (steps 1–3) before you touch the keyboard.</p>
+    </div>
+    <div style="margin-top:16px">
+      <span class="pill">1 · Understand</span><span class="pill">2 · Example by hand</span><span class="pill">3 · Plan</span><span class="pill">4 · Code</span><span class="pill">5 · Test</span>
+    </div>
+  </section>
+
+  <!-- 15 CLOSE -->
+  <section class="slide cover">
+    <div class="brandbar"><span class="dot"></span><span>Softpro School of AI · Day 5</span></div>
+    <h1>The plan is the <em>program.</em><br>The code just types it.</h1>
+    <p class="lead" style="margin-top:18px">Master the 5 steps and no new problem can fully stump you — you'll always know how to start.</p>
+    <div class="footer-note">Think first. Type second. Test always.</div>
+  </section>
+
+</div>
+
+<div class="count" id="count">1 / 15</div>
+<div class="nav"><button id="prev" aria-label="Previous">‹</button><button id="full" aria-label="Fullscreen">⛶</button><button id="next" aria-label="Next">›</button></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];let i=0;
+  const bar=document.getElementById('bar'),count=document.getElementById('count');
+  function show(n){i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    bar.style.width=((i+1)/slides.length*100)+'%';count.textContent=(i+1)+' / '+slides.length;}
+  function next(){show(i+1)}function prev(){show(i-1)}
+  document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;
+  document.getElementById('full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' ')next();
+    else if(e.key==='ArrowLeft')prev();
+    else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+    else if(e.key==='f'||e.key==='F')document.getElementById('full').click();});
+  document.getElementById('stage').addEventListener('click',e=>{
+    if(e.target.closest('.nav'))return;const x=e.clientX/window.innerWidth;x>0.5?next():prev();});
+  show(0);
+</script>
+</body>
+</html>
